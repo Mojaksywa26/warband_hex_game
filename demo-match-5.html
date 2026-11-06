@@ -169,7 +169,7 @@
     .attack-marker.initiative-preview-dealt { filter: drop-shadow(0 0 6px rgba(255,215,120,1)) drop-shadow(0 0 3px rgba(255,215,120,.9)); }
     .initiative-preview-hit-side { fill: none; stroke: #e05545; stroke-linecap: round; }
     .initiative-preview-skull { font: 700 52px/1 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif; text-anchor: middle; dominant-baseline: central; stroke: rgba(20,18,16,.8); stroke-width: 1.5px; paint-order: stroke; opacity: .96; pointer-events: none; }
-    .battle-death-skull { font: 700 36px/1 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif; text-anchor: middle; dominant-baseline: central; stroke: rgba(20,18,16,.85); stroke-width: 1.2px; paint-order: stroke; opacity: .94; pointer-events: none; }
+    .battle-death-skull { font: 700 52px/1 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif; text-anchor: middle; dominant-baseline: central; stroke: rgba(20,18,16,.8); stroke-width: 1.5px; paint-order: stroke; opacity: .96; pointer-events: none; }
     .map > g.initiative-preview-idle, .token-badge-layer > g.initiative-preview-idle { filter: grayscale(.7) brightness(.5); }
     .map > g.initiative-preview-death-dim, .token-badge-layer > g.initiative-preview-death-dim { filter: grayscale(.85) brightness(.34); }
     .rotation-tooltip.deploy-flash { animation: deploy-tip-glow 2.4s ease-out; }
@@ -2812,6 +2812,10 @@
     const abilityTargetingLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     abilityTargetingLayer.setAttribute('class', 'ability-targeting-layer');
     map.appendChild(abilityTargetingLayer);
+    const battleDeathLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    battleDeathLayer.setAttribute('class', 'battle-death-layer');
+    battleDeathLayer.style.pointerEvents = 'none';
+    map.appendChild(battleDeathLayer);
     let combatEffectSerial = 0;
     const initiativeAnchors = tokenData.map(() => null);
     const temporaryEffectsAnchors = tokenData.map(() => null);
@@ -8519,18 +8523,19 @@
     // Disgraceful Sprouts vanish when destroyed and return to the reserve pool
     // instead of entering the graveyard.
     const showBattleDeathSkull = tokenIndex => {
-      const token = tokens[tokenIndex];
-      if (!token || token.querySelector('.battle-death-skull')) return;
+      if (battleDeathLayer.querySelector(`[data-battle-death-token="${tokenIndex}"]`)) return;
+      const [x, y] = positionOf(tokens[tokenIndex]);
       const skull = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       skull.setAttribute('class', 'battle-death-skull');
+      skull.setAttribute('data-battle-death-token', tokenIndex);
       skull.setAttribute('fill', '#e05545');
-      skull.setAttribute('x', '0');
-      skull.setAttribute('y', '4');
+      skull.setAttribute('x', x);
+      skull.setAttribute('y', y + 4);
       skull.textContent = '☠';
-      token.appendChild(skull);
+      battleDeathLayer.appendChild(skull);
     };
     const hideBattleDeathSkull = tokenIndex => {
-      tokens[tokenIndex]?.querySelector('.battle-death-skull')?.remove();
+      battleDeathLayer.querySelector(`[data-battle-death-token="${tokenIndex}"]`)?.remove();
     };
     const destroySprout = tokenIndex => {
       if (!isSproutToken(tokenIndex)) return;
