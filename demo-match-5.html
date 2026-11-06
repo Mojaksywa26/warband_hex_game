@@ -169,7 +169,7 @@
     .attack-marker.initiative-preview-dealt { filter: drop-shadow(0 0 6px rgba(255,215,120,1)) drop-shadow(0 0 3px rgba(255,215,120,.9)); }
     .initiative-preview-hit-side { fill: none; stroke: #e05545; stroke-linecap: round; }
     .initiative-preview-skull { font: 700 52px/1 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif; text-anchor: middle; dominant-baseline: central; stroke: rgba(20,18,16,.8); stroke-width: 1.5px; paint-order: stroke; opacity: .96; pointer-events: none; }
-    .battle-death-skull { font: 700 52px/1 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif; text-anchor: middle; dominant-baseline: central; stroke: rgba(20,18,16,.8); stroke-width: 1.5px; paint-order: stroke; opacity: .96; pointer-events: none; }
+    .battle-death-skull { font: 700 52px/1 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif; text-anchor: middle; dominant-baseline: central; stroke: rgba(20,18,16,.8); stroke-width: 1.5px; paint-order: stroke; pointer-events: none; }
     .map > g.initiative-preview-idle, .token-badge-layer > g.initiative-preview-idle { filter: grayscale(.7) brightness(.5); }
     .map > g.initiative-preview-death-dim, .token-badge-layer > g.initiative-preview-death-dim { filter: grayscale(.85) brightness(.34); }
     .rotation-tooltip.deploy-flash { animation: deploy-tip-glow 2.4s ease-out; }
@@ -8536,7 +8536,13 @@
       skull.setAttribute('x', x);
       skull.setAttribute('y', y + 4);
       skull.textContent = '☠';
+      skull.style.opacity = '0';
       battleDeathLayer.appendChild(skull);
+      skull.animate([
+        { opacity: 0, offset: 0 },
+        { opacity: 0.96, offset: 0.166 },
+        { opacity: 0.30, offset: 1 }
+      ], { duration: 1200, easing: 'ease-out', fill: 'forwards' });
     };
     const hideBattleDeathSkull = tokenIndex => {
       battleDeathLayer.querySelector(`[data-battle-death-token="${tokenIndex}"]`)?.remove();
