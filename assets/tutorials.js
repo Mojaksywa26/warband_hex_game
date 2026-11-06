@@ -232,6 +232,7 @@
 
   const render = () => {
     if (!session?.active) return;
+    clearGlowTimers();
     const slide = session.slides[session.index];
     session.cleanup?.();
     session.cleanup = null;
@@ -255,6 +256,11 @@
         { opacity: 1, transform: 'translateY(0)' }
       ], { duration: 160, easing: 'ease-out' });
     }
+    glowTimer = startGlowCycle(session.box, 3000, 1200);
+    glowSwitchTimer = setTimeout(() => {
+      clearInterval(glowTimer);
+      glowTimer = startGlowCycle(session.next, 3000, 1200);
+    }, 10000);
   };
 
   const keydown = event => {
@@ -276,6 +282,7 @@
 
   function finish(skipped = false) {
     if (!session?.active) return;
+    clearGlowTimers();
     session.active = false;
     const effect = skipped ? null : session.slides[session.index]?.effect || null;
     session.cleanup?.();
@@ -304,6 +311,28 @@
     render();
     session.next.focus({ preventScroll: true });
   }
+
+  let glowTimer = null;
+  let glowSwitchTimer = null;
+
+  const clearGlowTimers = () => {
+    if (glowTimer) { clearInterval(glowTimer); glowTimer = null; }
+    if (glowSwitchTimer) { clearTimeout(glowSwitchTimer); glowSwitchTimer = null; }
+  };
+
+  const startGlow = (element, duration = 1200) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    element.animate([
+      { boxShadow: '0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 0 0 rgba(198,163,86,0)' },
+      { boxShadow: '0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 18px 3px rgba(198,163,86,.55)', offset: 0.166 },
+      { boxShadow: '0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 0 0 rgba(198,163,86,0)', offset: 1 }
+    ], { duration, easing: 'ease-in-out' });
+  };
+
+  const startGlowCycle = (element, interval = 3000, duration = 1200) => {
+    startGlow(element, duration);
+    return setInterval(() => startGlow(element, duration), interval);
+  };
 
   const start = slides => {
     if (!slides.length) return Promise.resolve();
