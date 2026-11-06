@@ -336,7 +336,7 @@
     let pulseCount = 0;
     const runPulse = () => {
       pulseCount++;
-      const intensity = pulseCount % 2 === 0 ? 1.5 : 1;
+      const intensity = pulseCount % 2 === 0 ? 2.0 : 1;
       startGlow(element, duration, intensity);
     };
     runPulse();
