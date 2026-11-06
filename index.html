@@ -80,6 +80,7 @@
       box-shadow: inset 0 1px #ffffff12, inset 0 -2px #0007, 0 3px 6px #0005;
     }
     html[data-ui-theme="ironbound"] .menu-button:hover:not(:disabled) { background: linear-gradient(#505149, #33342f); }
+    .warband-version { position: fixed; bottom: 6px; right: 10px; font: 10px/1 var(--body); color: rgba(198,163,86,.35); pointer-events: none; z-index: 9999; letter-spacing: .05em; }
   </style>
 </head>
 <body>
@@ -126,6 +127,9 @@
       <button class="menu-button options-back" type="button" data-options-back>Back to Main Menu</button>
     </div>
   </section>
+  <div class="warband-version" id="warband-version"></div>
+  <script src="assets/version.js"></script>
+  <script>document.getElementById('warband-version').textContent = window.WARBAND_VERSION || '';</script>
   <script src="assets/ui-theme.js"></script>
   <script src="assets/ui-localization.js"></script>
   <script src="assets/ui-options.js"></script>

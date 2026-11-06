@@ -1242,6 +1242,7 @@
       .ai-result-stat span, .ai-log-entry { font-size: 12px; }
       .card-lore { font-size: 12px; }
     }
+    .warband-version { position: fixed; bottom: 6px; right: 10px; font: 10px/1 var(--body); color: rgba(198,163,86,.35); pointer-events: none; z-index: 9999; letter-spacing: .05em; }
   </style>
 </head>
 <body>
@@ -11860,6 +11861,9 @@
     };
     launchRequestedScenario().catch(reportGameError);
   </script>
+  <div class="warband-version" id="warband-version"></div>
+  <script src="assets/version.js"></script>
+  <script>document.getElementById('warband-version').textContent = window.WARBAND_VERSION || '';</script>
   <script src="assets/ui-theme.js"></script>
   <script src="assets/ui-localization.js"></script>
   <script src="assets/ui-options.js"></script>

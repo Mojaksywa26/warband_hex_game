@@ -173,6 +173,7 @@
       .card-row { grid-template-columns: 1fr; gap: 12px; }
       .card-actions, .deck-card-actions, .catalogue-actions { justify-self: start; justify-items: start; }
     }
+    .warband-version { position: fixed; bottom: 6px; right: 10px; font: 10px/1 var(--body); color: rgba(198,163,86,.35); pointer-events: none; z-index: 9999; letter-spacing: .05em; }
   </style>
 </head>
 <body>
@@ -718,6 +719,9 @@
         .catch(error => setStatus(`Editor initialization failed: ${error.message}`, 'error'));
     })();
   </script>
+  <div class="warband-version" id="warband-version"></div>
+  <script src="assets/version.js"></script>
+  <script>document.getElementById('warband-version').textContent = window.WARBAND_VERSION || '';</script>
   <script src="assets/ui-theme.js"></script>
 </body>
 </html>

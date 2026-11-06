@@ -1,0 +1,1 @@
+window.WARBAND_VERSION = 'v2026.11.06.8';
