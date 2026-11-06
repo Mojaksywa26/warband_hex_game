@@ -5134,7 +5134,6 @@
       if (amount > 0 && animateAura) animateDamageAura(tokenIndex);
       syncWoundMarks(tokenIndex);
       if (tokenState[tokenIndex].hp <= 0) {
-        showBattleDeathSkull(tokenIndex);
         if (isCombatToken(tokenIndex)) moveToGraveyard(tokenIndex);
         else if (isSproutToken(tokenIndex)) destroySprout(tokenIndex);
         else {
@@ -7659,6 +7658,10 @@
       const healthBar = healing
         ? healingHealthBar(targetIndex, barAmount, hpBefore)
         : damageHealthBar(targetIndex, Math.abs(barAmount), hpBefore);
+      if (!healing && healthBar) {
+        const remainingHP = Math.max(0, hpBefore - Math.abs(barAmount));
+        if (remainingHP <= 0) showBattleDeathSkull(targetIndex);
+      }
       group.append(label);
       if (healthBar) {
         healthBar.setAttribute('transform', 'translate(0 9)');
@@ -7991,7 +7994,6 @@
       const hpBeforeStep = hpBeforeAttack > 0 ? tokenState[attack.targetIndex].hp : 0;
       animateDamageNumber(attack.targetIndex, attack.damage, hpBeforeStep, cumulativeDamage);
       sameStepDamage.set(attack.targetIndex, cumulativeDamage);
-      if (hpBeforeStep - cumulativeDamage <= 0) showBattleDeathSkull(attack.targetIndex);
       if (attack.activationDamageReduction > 0) {
         const card = cardDefinitions.get('scrap_shield');
         animateCardSymbolHover(attack.targetIndex, temporaryEffectGlyph(card), factions[tokenData[attack.targetIndex].player - 1]?.color || '#c6a356');
