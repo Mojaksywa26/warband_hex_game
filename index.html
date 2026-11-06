@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#191715">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 9v14l-13 7L3 23V9Z' fill='%23191715' stroke='%23c6a356'/%3E%3C/svg%3E">
+  <title>Warband</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #191715;
+      --parchment: #f4ecd8;
+      --gold: #c6a356;
+      --bone-dim: #bcb29d;
+      --display: "Baskervville SC", Georgia, serif;
+      --body: "Libre Baskerville", Georgia, serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      color: var(--parchment);
+      background: radial-gradient(ellipse at 50% 38%, rgba(56, 71, 50, .3), transparent 56%), var(--ink);
+      font-family: var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .055;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+    }
+    .main-menu { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+    .main-menu[hidden] { display: none; }
+    .menu-panel { width: min(100%, 320px); text-align: center; }
+    .menu-title { font: 41.6px/1 var(--display); letter-spacing: .18em; font-weight: 400; }
+    .menu-subtitle { margin-top: 10px; color: var(--bone-dim); font-size: 10.4px; letter-spacing: .22em; text-transform: uppercase; }
+    .menu-buttons { display: grid; gap: 12px; margin-top: 42px; }
+    .menu-button { display: grid; place-items: center; min-height: 48px; color: var(--parchment); background: #24231e; border: 1px solid rgba(198,163,86,.5); font: 11.7px/1 var(--body); letter-spacing: .16em; text-decoration: none; text-transform: uppercase; cursor: pointer; }
+    .menu-button:hover:not(:disabled) { color: var(--gold); border-color: var(--gold); }
+    .menu-button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .menu-button:disabled { color: var(--bone-dim); background: #211f1c; border-color: rgba(244,236,216,.1); opacity: .38; cursor: not-allowed; }
+    .options-form { display: grid; gap: 18px; margin-top: 32px; text-align: left; }
+    .options-field { display: grid; gap: 8px; color: var(--bone-dim); font-size: 10.4px; letter-spacing: .15em; text-transform: uppercase; }
+    .options-field select { width: 100%; height: 44px; padding: 0 12px; color: var(--parchment); background: #24231e; border: 1px solid rgba(198,163,86,.5); font: 13px var(--body); }
+    .options-field select:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .options-note { color: var(--bone-dim); font-size: 10.4px; line-height: 1.6; }
+    .options-back { margin-top: 24px; width: 100%; }
+    [data-theme-toggle] { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    [data-theme-toggle]::before { content: ""; width: 7px; height: 7px; transform: rotate(45deg); border: 1px solid var(--gold); }
+    [data-theme-toggle][aria-pressed="true"]::before { background: var(--gold); box-shadow: 0 0 8px rgba(184,149,80,.35); }
+
+    html[data-ui-theme="ironbound"] {
+      --ink: #12110f;
+      --parchment: #e8d9b5;
+      --gold: #b89550;
+      --bone-dim: #b8aa8b;
+    }
+    html[data-ui-theme="ironbound"] body {
+      background:
+        linear-gradient(rgba(18,17,15,.8), rgba(18,17,15,.9)),
+        url("assets/ironbound/Wood051_1K-JPG_Color.jpg") center / 640px;
+    }
+    html[data-ui-theme="ironbound"] .menu-panel {
+      padding: 34px 28px;
+      background:
+        linear-gradient(rgba(38,37,34,.93), rgba(28,27,24,.96)),
+        url("assets/ironbound/Rock035_1K-JPG_Color.jpg") center / 520px;
+      border: 1px solid #756443;
+      box-shadow: 0 18px 50px #0009, inset 0 0 0 4px #12110f, inset 0 0 0 5px #b8955040;
+    }
+    html[data-ui-theme="ironbound"] .menu-button {
+      color: var(--parchment);
+      background: linear-gradient(#454640, #2b2c29 48%, #20211f 52%, #30312d);
+      border-color: #776641;
+      box-shadow: inset 0 1px #ffffff12, inset 0 -2px #0007, 0 3px 6px #0005;
+    }
+    html[data-ui-theme="ironbound"] .menu-button:hover:not(:disabled) { background: linear-gradient(#505149, #33342f); }
+  </style>
+</head>
+<body>
+  <main class="main-menu" id="main-menu" aria-labelledby="menu-title">
+    <div class="menu-panel">
+      <h1 class="menu-title" id="menu-title">WARBAND</h1>
+      <p class="menu-subtitle">A battle for the Hollow March</p>
+      <div class="menu-buttons">
+        <a class="menu-button" id="campaign-launch" href="campaign.html">Campaign</a>
+        <a class="menu-button" id="demo-5-launch" href="demo-match-5.html">Launch Demo 5 · Futuresight AI</a>
+        <button class="menu-button" type="button" data-options-open>Options</button>
+        <a class="menu-button" id="wiki-launch" href="wiki.html">Warband Wiki</a>
+        <a class="menu-button" id="deck-editor-launch" href="deck-editor.html">Deck Editor</a>
+      </div>
+    </div>
+  </main>
+  <section class="main-menu" id="options-menu" aria-labelledby="options-title" hidden>
+    <div class="menu-panel">
+      <h1 class="menu-title" id="options-title">OPTIONS</h1>
+      <p class="menu-subtitle">Presentation and language</p>
+      <div class="options-form">
+        <button class="menu-button" type="button" data-theme-toggle aria-pressed="false">UI Skin: Manuscript</button>
+        <label class="options-field">Language
+          <select id="language-select" aria-describedby="language-note">
+            <option value="en">English</option>
+            <option value="pl">Polish</option>
+            <option value="de">German</option>
+          </select>
+        </label>
+        <p class="options-note" id="language-note">Changes apply immediately and are saved on this device.</p>
+        <label class="options-field">Tutorials
+          <select id="option-tutorials-select" aria-label="Tutorials">
+            <option value="true">On</option>
+            <option value="false">Off</option>
+          </select>
+        </label>
+        <label class="options-field">Random Deployment Glow
+          <select id="option-deployment-glow-select" aria-label="Random Deployment Glow">
+            <option value="true">On</option>
+            <option value="false">Off</option>
+          </select>
+        </label>
+      </div>
+      <button class="menu-button options-back" type="button" data-options-back>Back to Main Menu</button>
+    </div>
+  </section>
+  <script src="assets/ui-theme.js"></script>
+  <script src="assets/ui-localization.js"></script>
+  <script src="assets/ui-options.js"></script>
+</body>
+</html>

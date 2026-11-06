@@ -1,0 +1,31 @@
+id,player,name,glyph,kind,hp,movement,initiative,attacks,shooting_attacks,static_abilities,activated_abilities,shields,illustration,object_behavior,spawn_count,reserve_count,keywords,name_pl,name_de,kind_pl,kind_de
+0,1,The Young Lord,K,Leader Token,20,2,2,NE|E,NW,,Call to Battle|Spear of the Great Huntmaster,,,,,,Princedoms|Human|Soldier|Leader,Młody Pan,Der junge Lord,Żeton Dowódcy,Anführer-Token
+1,1,Beast Hunter,I,Unit Token,5,2,2,E,NE|NW,Exploit Opening,,,,,,,Princedoms|Human|Hunter|Warrior,Łowca Bestii,Bestienjäger,Żeton Jednostki,Einheiten-Token
+2,1,Monster Hunter,II,Champion Token,6,2,2,E|W,NE(2)|SW,,,E,,,,,Princedoms|Human|Hunter|Warrior|Champion,Łowca Potworów,Monsterjäger,Żeton Czempiona,Champion-Token
+3,1,Hunting Hound,III,Unit Token,3,3,3|1,NE|E|NW,,,,,,,,,Princedoms|Hound|Beast,Pies Myśliwski,Jagdhund,Żeton Jednostki,Einheiten-Token
+4,1,Gallow Archer,IV,Unit Token,5,2,2,E,NE|E,Long Reach,,,,,,,Princedoms|Human|Soldier|Ranged,Łucznik Gallow,Gallow-Bogenschütze,Żeton Jednostki,Einheiten-Token
+5,2,"Josif, Tragedy of Umla",V,Leader Token,30,1,1,NE|SE|W,,,Scrapmaster's Command|Call to Battle,E|NW,,,,,Windtouched|Mutant|Leader|Warrior|Psychic,"Josif, Tragedia Umly","Josif, Tragödie von Umla",Żeton Dowódcy,Anführer-Token
+6,2,Prowler-kin,I,Unit Token,4,2,3,E|NW,,Scavenger's Eye,,,,,,,Windtouched|Mutant|Scavenger|Hound,Skradacz,Schleicherspross,Żeton Jednostki,Einheiten-Token
+7,2,Scraper-kin,II,Unit Token,5,2,2,NE|E,NE|E,Scavenger's Eye,,,,,,,Windtouched|Mutant|Scavenger,Zbieracz,Schrotter-Spross,Żeton Jednostki,Einheiten-Token
+8,2,Anvilhead,III,Champion Token,8,1,0,E(2)|SE|SW|W,,,,NE|E|W|NW,,,,,Windtouched|Mutant|Brute|Warrior|Champion,Kowadłogłowy,Ambosskopf,Żeton Czempiona,Champion-Token
+9,2,Pale Seer,IV,Unit Token,3,1,1,,NE(2)|NW(2),,,NE|NW,,,,,Windtouched|Mutant|Psychic|Seer,Blady Wróżbita,Bleicher Seher,Żeton Jednostki,Einheiten-Token
+10,3,Rurik River-Tusk,R,Leader Token,25,2,2,NE|E|SE|NW,,River-Tusk's Harvest,Call to Battle,E|SE,,,,,Southern Tribes|Human|Raider|Warrior|Leader,Rurik Rzeczny Kieł,Rurik Fluss-Stoßzahn,Żeton Dowódcy,Anführer-Token
+11,3,Frontier Reaver,VI,Unit Token,6,3,2,NE|NW,E,,Blood Offering,E,,,,,Southern Tribes|Human|Raider|Warrior,Pograniczny Łupieżca,Grenzräuber,Żeton Jednostki,Einheiten-Token
+12,3,Tusk Brute,VII,Champion Token,6,3,0,NE|E|SE|SW|W,,,Blood Offering,E|SW|NW,,,,,Southern Tribes|Human|Brute|Warrior|Champion,Kłowaty Olbrzym,Stoßzahnrohling,Żeton Czempiona,Champion-Token
+100,0,Scrap,S,Object Token,0,0,,,,Untouchable,,,,collect_scrap,5,24,,Złom,Schrott,Żeton Obiektu,Objekt-Token
+13,4,The Waywarden,W,Leader Token,20,2,1,NE|E,,,Waymaking|Aedific Sanctum|Call to Battle,,,,,,Princedoms|Human|Soldier|Leader,Strażnik Dróg,Der Weghüter,Żeton Dowódcy,Anführer-Token
+14,4,Aedific Assistant,A,Champion Token,5,2,2,E,NE,,Waymaking,,,,,,Princedoms|Human|Soldier|Psychic|Champion,Asystent Aedific,Aedific-Assistent,Żeton Czempiona,Champion-Token
+15,4,Highwayman,H,Unit Token,4,2,1|2,NE|E,,,,,,,,,Princedoms|Human|Warrior,Rozbójnik,Wegelagerer,Żeton Jednostki,Einheiten-Token
+16,4,Arbalest Engineer,E,Unit Token,4,1,1,,E(2),,Piercing Bolt,W,,,,,Princedoms|Human|Soldier|Ranged,Inżynier Arbalestów,Armbrustingenieur,Żeton Jednostki,Einheiten-Token
+17,4,Outrider,O,Unit Token,5,3,2,NE|SE,E,Free Rotation,,,,,,,Princedoms|Human|Soldier|Ranged,Przedni Jeździec,Vorreiter,Żeton Jednostki,Einheiten-Token
+101,0,Road,═,Object Token,1,0,,,,Co-occupancy|Battle-inert|Road,,,,road,0,12,Architecture,Droga,Straße,Żeton Obiektu,Objekt-Token
+102,0,Rubble Shrine,♜,Object Token,1,0,,,,Co-occupancy|Battle-inert|Rubble Shrine,,,,rubble_shrine,0,12,Architecture,,,,
+103,0,Rubble Trap,⌁,Object Token,1,0,,,,Co-occupancy|Battle-inert|Rubble Trap,,,,rubble_trap,0,12,Architecture,,,,
+18,5,Rat Emperor,♛,Leader Token,10,1,3,NE|SE,E,,Psychic Feeding Frenzy|Call to Battle,,,,,,Windtouched|Rat|Psychic|Leader,Imperator Szczurów,Rattenkaiser,Żeton Dowódcy,Anführer-Token
+19,5,Unusual Rodent,●,Unit Token,2,2,3,E,,Scavenger's Eye|Awaken the Swarm,,,,,,24,Windtouched|Rat|Scavenger,Niezwykły Gryzoń,Ungewöhnliches Nagetier,Żeton Jednostki,Einheiten-Token
+20,5,Flesh Collector,♟,Unit Token,5,2,1,NE|E|SE,,,Flesh Collecting,,,,,,Windtouched|Mutant|Scavenger,Zbieracz Ciała,Fleischsammler,Żeton Jednostki,Einheiten-Token
+21,6,Alder of Renn Hill,R,Leader Token,25,1,1,E(2)|SE|SW|W,,Final Sprout,Restless Disgraced,,,,,,Southern Tribes|Plant|Spirit|Undead|Leader,Olcha z Wzgórza Renn,Erle von Rennhügel,Żeton Dowódcy,Anführer-Token
+22,6,Verdurer of the Spight Circle,V,Champion Token,5,2,2,E,NE,Spark Blessed Spring,,SW,,,,,Southern Tribes|Human|Druid|Psychic|Champion,Zieleńczyk Kręgu Spight,Begrüner des Spight-Kreises,Żeton Czempiona,Champion-Token
+23,6,Birchlaid Scoundrel,B,Unit Token,5,1,3,E(2)|SE,,Final Sprout,,,,,2,,Southern Tribes|Plant|Spirit|Undead,Brzozowy Łotr,Birkenlauer Schuft,Żeton Jednostki,Einheiten-Token
+24,6,Birchlaid Sadist,S,Unit Token,6,1,3,E(3),,Final Sprout,,NE|SE,,,2,,Southern Tribes|Plant|Spirit|Undead,Brzozowy Sadysta,Birkenlauer Sadist,Żeton Jednostki,Einheiten-Token
+25,0,Disgraceful Sprout,✿,Object Token,4,,,,,Disgraceful Nourishment,,,,disgraceful_sprout,,12,Plant|Spirit,Hańbiący Kiełek,Schmachvoller Spross,Żeton Obiektu,Objekt-Token

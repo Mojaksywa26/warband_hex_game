@@ -1,0 +1,5 @@
+personality,temperature,minimum_value,relative_margin,candidates_per_type,pass_value
+balanced,1.5,0,4,3,0
+offensive,1,0,3,3,0
+defensive,2,0,5,3,0
+chaotic,4,-2,8,5,0

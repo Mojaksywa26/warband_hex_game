@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#191715">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 2 29 9v14l-13 7L3 23V9Z' fill='%23191715' stroke='%23c6a356'/%3E%3C/svg%3E">
+  <title>Warband Wiki</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/token-visuals.css">
+  <link rel="stylesheet" href="assets/wiki.css">
+</head>
+<body>
+  <a class="skip-link" href="#wiki-catalogue">Skip to entries</a>
+  <header class="wiki-header">
+    <div class="wiki-heading">
+      <a class="wiki-back" href="index.html" aria-label="Back to Main Menu">← Main Menu</a>
+      <div>
+        <h1>Warband Wiki</h1>
+        <p>Rules, Tokens, cards, and source data</p>
+      </div>
+    </div>
+    <div class="wiki-header-actions">
+      <label class="wiki-language">Language
+        <select id="language-select">
+          <option value="en">English</option>
+          <option value="pl">Polish</option>
+          <option value="de">German</option>
+        </select>
+      </label>
+      <button class="wiki-text-button" type="button" data-theme-toggle aria-pressed="false">UI Skin: Manuscript</button>
+    </div>
+  </header>
+
+  <main class="wiki-main">
+    <section class="wiki-controls" aria-label="Find wiki entries">
+      <label class="wiki-search-label" for="wiki-search">Search all entries</label>
+      <input id="wiki-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search names, descriptions, keywords…">
+      <nav class="wiki-categories" id="wiki-categories" aria-label="Categories"></nav>
+      <div class="wiki-filter-row">
+        <label>Type
+          <select id="wiki-type-filter"><option value="">All types</option></select>
+        </label>
+        <label>Keyword
+          <select id="wiki-keyword-filter"><option value="">All keywords</option></select>
+        </label>
+        <button class="wiki-text-button" id="wiki-clear" type="button">Clear filters</button>
+      </div>
+      <output id="wiki-count" aria-live="polite"></output>
+    </section>
+
+    <p class="wiki-status" id="wiki-status" role="status">Loading wiki entries…</p>
+
+    <div class="wiki-workspace" id="wiki-workspace" hidden>
+      <article class="wiki-detail" id="wiki-detail" aria-labelledby="wiki-detail-name" hidden>
+        <button class="wiki-text-button wiki-detail-close" id="wiki-detail-close" type="button">← All entries</button>
+        <div id="wiki-preview-mount"></div>
+        <header class="wiki-detail-header">
+          <p id="wiki-detail-category"></p>
+          <h2 id="wiki-detail-name"></h2>
+          <p id="wiki-detail-type"></p>
+          <div class="wiki-keywords" id="wiki-detail-keywords"></div>
+        </header>
+        <div class="wiki-descriptions" id="wiki-descriptions"></div>
+        <details class="wiki-source" id="wiki-source" open>
+          <summary>CSV data</summary>
+          <dl id="wiki-source-fields"></dl>
+        </details>
+        <div id="wiki-article-mount"></div>
+      </article>
+      <section class="wiki-catalogue" id="wiki-catalogue" aria-label="Wiki entries" tabindex="-1">
+        <div id="wiki-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/csv-data.js"></script>
+  <script src="assets/keyword-tooltips.js"></script>
+  <script src="assets/ui-theme.js"></script>
+  <script src="assets/ui-localization.js"></script>
+  <script src="assets/token-visuals.js"></script>
+  <script src="assets/wiki.js"></script>
+</body>
+</html>

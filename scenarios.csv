@@ -1,0 +1,14 @@
+scenario,scenario_name,mission,mission_name,description,type,target,value
+1,Scenario 1,1,Mission 1,The Young Lord faces two Prowler-kin on a featureless battlefield.,faction,1,1
+1,,1,,,faction,2,2
+1,,1,,,controller,1,human
+1,,1,,,controller,2,ai
+1,,1,,,ai_personality,1,balanced
+1,,1,,,ai_personality,2,balanced
+1,,1,,,tokens.set,1,0(1)
+1,,1,,,tokens.set,2,6(2)
+1,,1,,,deck.set,1,aether_discharge(2)|move(2)|battle(2)|war_song(2)|aim_well(2)|scrap_ammo(1)
+1,,1,,,deck.set,2,move(2)|battle(2)|war_song(2)|aether_discharge(2)|shivver(1)
+1,,1,,,hand.ensure,1,battle(1)|move(1)
+1,,1,,,hand.ensure,2,battle(1)|move(1)
+1,,1,,,map.clear_effects,,true

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#191715">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 9v14l-13 7L3 23V9Z' fill='%23191715' stroke='%23c6a356'/%3E%3C/svg%3E">
+  <title>Warband — Campaign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#191715; --parchment:#f4ecd8; --gold:#c6a356; --bone-dim:#bcb29d; --display:"Baskervville SC",Georgia,serif; --body:"Libre Baskerville",Georgia,serif; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { min-height:100dvh; color:var(--parchment); background:radial-gradient(ellipse at 50% 38%,rgba(56,71,50,.3),transparent 56%),var(--ink); font-family:var(--body); -webkit-font-smoothing:antialiased; }
+    body::after { content:""; position:fixed; inset:0; pointer-events:none; opacity:.055; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
+    .campaign { min-height:100dvh; display:grid; place-items:center; padding:24px; }
+    .campaign-panel { width:min(100%,620px); max-height:calc(100dvh - 48px); display:flex; flex-direction:column; padding:34px; background:rgba(25,23,21,.88); border:1px solid rgba(198,163,86,.45); box-shadow:0 18px 50px rgba(0,0,0,.35); }
+    .campaign-title { text-align:center; font:400 41.6px/1 var(--display); letter-spacing:.18em; }
+    .campaign-subtitle { margin-top:10px; color:var(--bone-dim); text-align:center; font-size:10.4px; letter-spacing:.18em; text-transform:uppercase; }
+    .scenario-list { display:grid; gap:12px; margin-top:30px; padding-right:6px; overflow-y:auto; scrollbar-color:var(--gold) rgba(244,236,216,.08); scrollbar-width:thin; }
+    .scenario { background:rgba(36,35,30,.82); border:1px solid rgba(198,163,86,.35); }
+    .scenario summary { position:relative; padding:20px 48px 20px 20px; color:var(--parchment); cursor:pointer; list-style:none; font:18px/1.3 var(--display); letter-spacing:.06em; }
+    .scenario summary::-webkit-details-marker { display:none; }
+    .scenario summary::after { content:"+"; position:absolute; right:20px; top:50%; transform:translateY(-50%); color:var(--gold); font:24px/1 var(--body); }
+    .scenario[open] summary::after { content:"−"; }
+    .scenario summary:hover { color:var(--gold); }
+    .scenario summary:focus-visible,.mission-link:focus-visible,.menu-button:focus-visible { outline:2px solid var(--gold); outline-offset:3px; }
+    .missions { display:grid; border-top:1px solid rgba(198,163,86,.2); }
+    .mission-link { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; color:var(--parchment); text-decoration:none; font-size:13px; line-height:1.5; }
+    .mission-link:hover { color:var(--gold); background:rgba(198,163,86,.06); }
+    .mission-link::after { content:"Launch →"; flex:none; color:var(--gold); font-size:10px; letter-spacing:.12em; text-transform:uppercase; }
+    .menu-button { flex:none; width:100%; min-height:48px; margin-top:22px; color:var(--parchment); background:#24231e; border:1px solid rgba(198,163,86,.5); font:11.7px/1 var(--body); letter-spacing:.16em; text-transform:uppercase; cursor:pointer; }
+    .menu-button:hover { color:var(--gold); border-color:var(--gold); }
+    html[data-ui-theme="ironbound"] { --ink:#12110f; --parchment:#e8d9b5; --gold:#b89550; --bone-dim:#b8aa8b; }
+    html[data-ui-theme="ironbound"] body { background:linear-gradient(rgba(18,17,15,.8),rgba(18,17,15,.9)),url("assets/ironbound/Wood051_1K-JPG_Color.jpg") center/640px; }
+    html[data-ui-theme="ironbound"] .campaign-panel { background:linear-gradient(rgba(38,37,34,.93),rgba(28,27,24,.96)),url("assets/ironbound/Rock035_1K-JPG_Color.jpg") center/520px; border-color:#756443; box-shadow:0 18px 50px #0009,inset 0 0 0 4px #12110f,inset 0 0 0 5px #b8955040; }
+    @media (max-width:560px) { .campaign { padding:12px; } .campaign-panel { max-height:calc(100dvh - 24px); padding:26px 18px; } .campaign-title { font-size:34px; } }
+  </style>
+</head>
+<body>
+  <main class="campaign" aria-labelledby="campaign-title">
+    <section class="campaign-panel">
+      <h1 class="campaign-title" id="campaign-title">CAMPAIGN</h1>
+      <p class="campaign-subtitle">Scenarios and missions</p>
+      <div class="scenario-list" id="scenario-list" aria-label="Campaign scenarios" aria-live="polite">
+        <p class="campaign-subtitle">Loading scenarios…</p>
+      </div>
+      <button class="menu-button" id="return-main-menu" type="button">Back to Main Menu</button>
+    </section>
+  </main>
+  <script src="assets/ui-theme.js"></script>
+  <script src="assets/scenarios.js"></script>
+  <script>
+    document.querySelector('#return-main-menu').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+    const scenarioList = document.querySelector('#scenario-list');
+    window.WarbandScenarios.list().then(missions => {
+      const scenarios = new Map();
+      missions.forEach(mission => {
+        if (!scenarios.has(mission.scenario)) scenarios.set(mission.scenario, { name: mission.scenarioName, missions: [] });
+        scenarios.get(mission.scenario).missions.push(mission);
+      });
+      scenarioList.replaceChildren(...[...scenarios.values()].map((scenario, index) => {
+        const details = document.createElement('details');
+        details.className = 'scenario';
+        details.open = index === 0;
+        const summary = document.createElement('summary');
+        summary.textContent = scenario.name;
+        const missionList = document.createElement('div');
+        missionList.className = 'missions';
+        scenario.missions.forEach(mission => {
+          const link = document.createElement('a');
+          link.className = 'mission-link';
+          link.href = `demo-match-5.html?scenario=${encodeURIComponent(mission.id)}`;
+          link.textContent = mission.missionName;
+          if (mission.description) link.title = mission.description;
+          missionList.appendChild(link);
+        });
+        details.append(summary, missionList);
+        return details;
+      }));
+    }).catch(error => {
+      scenarioList.textContent = error instanceof Error ? error.message : String(error);
+    });
+  </script>
+</body>
+</html>

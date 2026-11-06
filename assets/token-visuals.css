@@ -1,0 +1,24 @@
+.token-ring { fill: #1d1d18; stroke-width: 3; stroke-linejoin: round; }
+.token-inner { fill: none; stroke: rgba(244,236,216,.28); stroke-width: 1; stroke-linejoin: round; }
+.faction-token { stroke: var(--faction-color, var(--gold)); }
+.token-glyph { fill: var(--parchment); font: 28.6px/1 var(--display); text-anchor: middle; dominant-baseline: central; }
+.token-illustration { pointer-events: none; }
+.has-illustration .token-glyph { opacity: 0; }
+.token-exhausted > .token-core { filter: saturate(.08); }
+.leader-token { stroke-width: 4; }
+.object-token .token-ring { fill: #332e25; stroke: var(--faction-color, #a68b52); stroke-width: 2; }
+.object-token .token-inner { fill: #554833; stroke: var(--faction-color, #d0b675); stroke-width: 1; }
+.object-token .token-glyph { fill: var(--faction-highlight, #f0d79b); font-size: 19.5px; font-weight: 700; }
+.object-road .token-inner { fill: rgba(66,54,38,.88); stroke-width: 2; }
+.object-road .token-glyph { font-size: 25px; }
+.scrap-token-icon { color: var(--faction-highlight, #f0d79b); pointer-events: none; }
+.attack-marker { stroke: var(--ink); stroke-width: .8; stroke-linejoin: round; pointer-events: none; }
+.attack-marker.faction-token { --attack-marker-color: var(--faction-color, var(--gold)); fill: var(--attack-marker-color); }
+.attack-marker.faction-token.shooting-marker { --attack-marker-color: #8fb7c7; }
+.attack-marker.faction-token.psychic-attack-marker { --attack-marker-color: #174a9c; }
+.attack-power-outline-layer { opacity: .6; pointer-events: none; }
+.attack-power-outline { fill: none; stroke: #050505; stroke-width: 2; stroke-linejoin: round; }
+.initiative-anchor { pointer-events: none; }
+.initiative-icon { opacity: .85; }
+.initiative-disc { fill: var(--ink); stroke: var(--bone-dim); stroke-width: 1; }
+.initiative-value { fill: var(--parchment); font: 10.4px/1 var(--body); text-anchor: middle; dominant-baseline: central; }

@@ -1,0 +1,5 @@
+personality,movement_damage_weight,movement_incoming_weight,ally_attack_urgency_weight,wounded_target_weight,leader_target_weight,lethal_target_weight,leader_avenger_weight,wounded_survival_weight,lethal_avoidance_weight,relocation_urgency_weight,leader_incoming_weight,leader_lethal_exposure_weight,opening_battle_penalty,repeated_card_penalty
+balanced,32,5,10,8,6,12,10,10,45,12,18,120,3,2
+offensive,40,3,8,10,9,18,14,6,30,15,12,90,3,1.5
+defensive,26,12,12,6,4,10,8,16,65,9,26,180,3,2.5
+chaotic,32,5,10,7,5,14,12,9,40,12,16,110,3,2

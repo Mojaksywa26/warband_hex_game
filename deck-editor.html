@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#191715">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 9v14l-13 7L3 23V9Z' fill='%23191715' stroke='%23c6a356'/%3E%3C/svg%3E">
+  <title>Deck Editor · Warband</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #191715;
+      --panel: #24231e;
+      --parchment: #f4ecd8;
+      --gold: #c6a356;
+      --bone-dim: #bcb29d;
+      --line: rgba(198,163,86,.32);
+      --display: "Baskervville SC", Georgia, serif;
+      --body: "Libre Baskerville", Georgia, serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      color: var(--parchment);
+      background: radial-gradient(ellipse at 50% 20%, rgba(56,71,50,.3), transparent 54%), var(--ink);
+      font-family: var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .055;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+    }
+    button, select, input { font: inherit; }
+    button, select, input, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    button:disabled { opacity: .38; cursor: not-allowed; }
+    [hidden] { display: none !important; }
+    .page { width: min(1440px, 100%); margin: 0 auto; padding: 28px clamp(16px, 3vw, 44px) 56px; }
+    .topline { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+    .brand { font: 31.2px/1 var(--display); letter-spacing: .18em; }
+    .back-link { color: var(--bone-dim); font-size: 13px; letter-spacing: .08em; text-decoration: none; }
+    .back-link:hover { color: var(--gold); }
+    .hero { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: 34px 0 26px; }
+    h1 { font: 400 clamp(30px, 4vw, 48px)/1 var(--display); letter-spacing: .08em; }
+    .hero p { max-width: 520px; margin-top: 12px; color: var(--bone-dim); font-size: 14.3px; line-height: 1.8; }
+    .sandbox-note { color: var(--gold); font-size: 11.7px; line-height: 1.7; letter-spacing: .12em; text-transform: uppercase; text-align: right; }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 18px; background: rgba(36,35,30,.82); border: 1px solid var(--line); }
+    .button {
+      min-height: 42px;
+      padding: 0 17px;
+      color: var(--parchment);
+      background: #2c2b25;
+      border: 1px solid rgba(198,163,86,.55);
+      font-size: 11.7px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .button:hover:not(:disabled) { color: var(--gold); border-color: var(--gold); }
+    .button.primary { color: var(--ink); background: var(--gold); border-color: var(--gold); font-weight: 700; }
+    .button.primary:hover:not(:disabled) { color: var(--ink); background: #d7b96f; }
+    .button.small { min-height: 32px; padding: 0 11px; font-size: 10.4px; }
+    .button.quiet { border-color: rgba(244,236,216,.18); color: var(--bone-dim); }
+    .field { display: grid; gap: 7px; min-width: min(260px, 100%); }
+    .field > span, .section-kicker { color: var(--bone-dim); font-size: 10.4px; letter-spacing: .14em; text-transform: uppercase; }
+    .name-field { width: min(100%, 420px); margin-top: 16px; }
+    .name-field input { width: 100%; font-size: 14.3px; }
+    select, input[type="search"], input[type="number"], input[type="text"] {
+      height: 42px;
+      padding: 0 12px;
+      color: var(--parchment);
+      background: #1d1c18;
+      border: 1px solid rgba(198,163,86,.45);
+      border-radius: 0;
+    }
+    select { min-width: 240px; font-size: 13px; }
+    input[type="search"] { width: 100%; font-size: 14.3px; }
+    .file-button { display: inline-grid; place-items: center; }
+    .new-faction { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 18px; border: 1px solid var(--line); border-top: 0; background: rgba(25,23,21,.88); }
+    .status { min-height: 24px; padding: 12px 2px 0; color: var(--bone-dim); font-size: 13px; line-height: 1.6; }
+    .status.error { color: #d79a8e; }
+    .status.success { color: #b8c99c; }
+    .workspace { margin-top: 28px; }
+    .warband-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 0 20px; border-bottom: 1px solid var(--line); }
+    .warband-heading h2 { margin-top: 6px; font: 400 27px/1.2 var(--display); letter-spacing: .05em; }
+    .warband-heading p { margin-top: 7px; color: var(--bone-dim); font-size: 13px; }
+    .save-area { display: grid; justify-items: end; gap: 8px; }
+    .save-area small { max-width: 310px; color: var(--bone-dim); font-size: 10.4px; line-height: 1.6; text-align: right; }
+    .roster { padding: 22px 0 26px; }
+    .roster h3, .panel-heading h3 { font: 400 18px/1.2 var(--display); letter-spacing: .05em; }
+    .token-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 1px; margin-top: 14px; background: var(--line); border: 1px solid var(--line); }
+    .token { padding: 15px; background: var(--ink); }
+    .token-name { display: flex; justify-content: space-between; gap: 10px; font-size: 14.3px; }
+    .token-count { color: var(--gold); white-space: nowrap; }
+    .token-kind { margin-top: 6px; color: var(--bone-dim); font-size: 10.4px; letter-spacing: .08em; text-transform: uppercase; }
+    .token-stats { margin-top: 12px; color: var(--bone-dim); font-size: 11.7px; line-height: 1.8; }
+    .editor-grid { display: grid; grid-template-columns: minmax(340px, .9fr) minmax(420px, 1.1fr); gap: 24px; align-items: start; }
+    .panel { min-width: 0; border-top: 2px solid var(--gold); background: rgba(36,35,30,.68); }
+    .panel-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 18px; border-bottom: 1px solid var(--line); }
+    .deck-total { color: var(--gold); font-size: 13px; white-space: nowrap; }
+    .card-list { list-style: none; }
+    .card-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 16px 18px; border-bottom: 1px solid rgba(198,163,86,.17); }
+    .card-row:last-child { border-bottom: 0; }
+    .card-name { font-size: 14.3px; line-height: 1.5; }
+    .card-meta { margin-top: 4px; color: var(--gold); font-size: 10.4px; line-height: 1.6; letter-spacing: .05em; text-transform: uppercase; }
+    .keyword-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .keyword-list:empty { display: none; }
+    .keyword-chip { display: inline-flex; align-items: center; min-height: 18px; padding: 2px 6px; color: var(--parchment); background: rgba(244,236,216,.045); border: 1px solid rgba(244,236,216,.22); font-size: 9.1px; line-height: 1.2; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .keyword-chip.keyword-faction { color: var(--gold); border-color: rgba(198,163,86,.58); background: rgba(198,163,86,.08); }
+    .keyword-chip.keyword-function { color: #9fc6d3; border-color: rgba(143,183,199,.5); background: rgba(143,183,199,.07); }
+    .keyword-chip.keyword-special { gap: 4px; color: #ffe0a0; border-color: #c6a356; background: linear-gradient(135deg, rgba(198,163,86,.24), rgba(126,74,45,.2)); box-shadow: inset 0 0 0 1px rgba(255,224,160,.08); font-weight: 700; }
+    .keyword-chip.keyword-leader::before { content: '♛'; font-size: 11px; }
+    .keyword-chip.keyword-champion::before { content: '◆'; font-size: 9px; }
+    .keyword-chip.keyword-psychic { gap: 4px; color: #c4edff; border-color: #71c7ed; background: linear-gradient(135deg, rgba(80,190,255,.2), rgba(104,92,190,.16)); box-shadow: 0 0 6px rgba(80,190,255,.16), inset 0 0 0 1px rgba(196,237,255,.08); font-weight: 700; }
+    .keyword-chip.keyword-psychic::before { content: '✦'; color: #8ddcff; font-size: 10px; }
+    .card-description { margin-top: 8px; color: var(--bone-dim); font-size: 11.7px; line-height: 1.7; }
+    .card-actions { display: flex; align-items: center; gap: 7px; align-self: center; }
+    .count-control { display: grid; grid-template-columns: 32px 66px 32px; align-items: center; gap: 5px; }
+    .count-control input { width: 66px; height: 34px; padding: 0 4px; text-align: center; font-size: 14.3px; }
+    .count-control .button { min-height: 34px; padding: 0; }
+    .deck-card-actions { display: grid; justify-items: end; gap: 8px; }
+    .empty { padding: 34px 20px; color: var(--bone-dim); font-size: 13px; line-height: 1.8; text-align: center; }
+    .catalogue-search { padding: 16px 18px 0; }
+    .in-deck { color: var(--bone-dim); font-size: 10.4px; white-space: nowrap; }
+    .catalogue-actions { display: grid; justify-items: end; gap: 7px; }
+    .footer-note { margin-top: 24px; color: var(--bone-dim); font-size: 11.7px; line-height: 1.8; }
+
+    html[data-ui-theme="ironbound"] {
+      --ink: #12110f;
+      --panel: #292824;
+      --parchment: #e8d9b5;
+      --gold: #b89550;
+      --bone-dim: #b8aa8b;
+      --line: rgba(184,149,80,.38);
+    }
+    html[data-ui-theme="ironbound"] body {
+      background: linear-gradient(rgba(18,17,15,.86), rgba(18,17,15,.94)), url("assets/ironbound/Wood051_1K-JPG_Color.jpg") center / 640px;
+    }
+    html[data-ui-theme="ironbound"] .toolbar,
+    html[data-ui-theme="ironbound"] .panel {
+      background: linear-gradient(rgba(45,44,39,.94), rgba(31,30,27,.96)), url("assets/ironbound/Rock035_1K-JPG_Color.jpg") center / 520px;
+      border-color: #756443;
+    }
+    html[data-ui-theme="ironbound"] .button {
+      background: linear-gradient(#454640, #2b2c29 48%, #20211f 52%, #30312d);
+      border-color: #776641;
+      box-shadow: inset 0 1px #ffffff12, inset 0 -2px #0007, 0 3px 6px #0005;
+    }
+    html[data-ui-theme="ironbound"] .button.primary { color: #171510; background: linear-gradient(#c5a562, #9f803f); }
+
+    @media (max-width: 900px) {
+      .editor-grid { grid-template-columns: 1fr; }
+      .hero { align-items: start; flex-direction: column; }
+      .sandbox-note { text-align: left; }
+    }
+    @media (max-width: 620px) {
+      .page { padding-top: 18px; }
+      .topline, .warband-heading { align-items: start; }
+      .brand { font-size: 24.7px; }
+      .hero { padding-top: 26px; }
+      .toolbar, .new-faction { align-items: stretch; flex-direction: column; }
+      .toolbar .button, .new-faction .button, .field, select { width: 100%; }
+      .warband-heading { flex-direction: column; }
+      .save-area { width: 100%; justify-items: stretch; }
+      .save-area small { max-width: none; text-align: left; }
+      .card-row { grid-template-columns: 1fr; gap: 12px; }
+      .card-actions, .deck-card-actions, .catalogue-actions { justify-self: start; justify-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topline">
+      <div class="brand">WARBAND</div>
+      <a class="back-link" href="index.html">← Back to Main Menu</a>
+    </div>
+
+    <header class="hero">
+      <div>
+        <h1>DECK EDITOR</h1>
+        <p>Create a custom warband from any faction’s roster and starting deck, then build a 15–100 card, 50-point deck with up to 3 copies of each card.</p>
+      </div>
+      <div class="sandbox-note">50-point construction<br>TXT export · Demo 5 ready</div>
+    </header>
+
+    <section class="toolbar" aria-label="Warband sources">
+      <button class="button" id="new-warband" type="button">New Warband</button>
+      <label class="field">
+        <span>Load built-in warband</span>
+        <select id="built-in-select" disabled><option value="">Loading factions…</option></select>
+      </label>
+      <label class="field">
+        <span>Load saved warband</span>
+        <select id="saved-select" disabled><option value="">No saved warbands yet</option></select>
+      </label>
+      <label class="button file-button" for="warband-file">Import TXT</label>
+      <input id="warband-file" type="file" accept=".txt,text/plain" hidden>
+    </section>
+    <section class="new-faction" id="new-faction-panel" aria-label="Create new warband" hidden>
+      <label class="field">
+        <span>Base faction</span>
+        <select id="new-faction-select"></select>
+      </label>
+      <button class="button primary" id="create-warband" type="button">Fetch Roster &amp; Starting Deck</button>
+    </section>
+    <p class="status" id="status" role="status" aria-live="polite">Loading cards, factions, and tokens…</p>
+
+    <section class="workspace" id="workspace" aria-label="Deck editor workspace" hidden>
+      <div class="warband-heading">
+        <div>
+          <div class="section-kicker">Editing warband</div>
+          <h2 id="faction-name"></h2>
+          <p id="faction-leader"></p>
+          <div class="keyword-list" id="faction-keywords" aria-label="Faction keywords"></div>
+          <label class="field name-field">
+            <span>Custom warband name · must be unique</span>
+            <input id="warband-name" type="text" autocomplete="off" required placeholder="Enter a unique warband name">
+          </label>
+        </div>
+        <div class="save-area">
+          <button class="button primary" id="save-warband" type="button">Save &amp; Export TXT</button>
+          <small>Remembers this deck in your browser and downloads a JSON-formatted TXT backup. If browser data is cleared, import the TXT to restore it.</small>
+        </div>
+      </div>
+
+      <section class="roster" aria-labelledby="roster-title">
+        <div class="section-kicker">Read-only faction roster</div>
+        <h3 id="roster-title">Tokens</h3>
+        <div class="token-list" id="token-list"></div>
+      </section>
+
+      <div class="editor-grid">
+        <section class="panel" aria-labelledby="deck-title">
+          <div class="panel-heading">
+            <div>
+              <div class="section-kicker">Current build</div>
+              <h3 id="deck-title">Your Deck</h3>
+            </div>
+            <div class="deck-total" id="deck-total">0 cards</div>
+            <div class="deck-total" id="deck-points">0 / 50 points</div>
+          </div>
+          <p class="empty" id="empty-deck">Your deck is empty. Add at least 15 cards from the catalogue before saving.</p>
+          <ul class="card-list" id="deck-list"></ul>
+        </section>
+
+        <section class="panel" aria-labelledby="catalogue-title">
+          <div class="panel-heading">
+            <div>
+              <div class="section-kicker">Every card · unlimited copies</div>
+              <h3 id="catalogue-title">Card Catalogue</h3>
+            </div>
+          </div>
+          <div class="catalogue-search">
+            <input id="card-search" type="search" placeholder="Search cards…" aria-label="Search card catalogue">
+          </div>
+          <p class="empty" id="empty-catalogue" hidden>No cards match this search.</p>
+          <ul class="card-list" id="catalogue-list"></ul>
+        </section>
+      </div>
+      <p class="footer-note">Decks must contain 15–100 cards, cost no more than 50 points, and include no more than 3 copies of any card. A warband may include no more than 2 Champions. Tokens are supplied by the selected base faction and are not changed by this editor.</p>
+    </section>
+  </main>
+
+  <script src="assets/csv-data.js"></script>
+  <script src="assets/warband-library.js"></script>
+  <script src="assets/keyword-tooltips.js"></script>
+  <script>
+    (() => {
+      const elements = Object.fromEntries([
+        'new-warband', 'built-in-select', 'saved-select', 'warband-file', 'new-faction-panel', 'new-faction-select',
+        'create-warband', 'status', 'workspace', 'faction-name', 'faction-leader', 'faction-keywords', 'warband-name', 'save-warband',
+        'token-list', 'deck-total', 'deck-points', 'empty-deck', 'deck-list', 'card-search', 'empty-catalogue',
+        'catalogue-list'
+      ].map(id => [id, document.getElementById(id)]));
+
+      const CARD_COPY_LIMIT = 3;
+      const WARBAND_POINT_LIMIT = 50;
+      const MIN_DECK_CARDS = 15;
+      const MAX_DECK_CARDS = 100;
+      const state = { faction: null, deck: new Map(), currentId: null };
+      let factions = [];
+      let cards = [];
+      let tokenData = [];
+      let keywordText = new Map();
+      let keywordLookup = new Map();
+
+      const { readCSV } = window.WarbandCSV;
+
+      const loadKeywordVocabulary = keywordRows => {
+        keywordText = new Map();
+        keywordLookup = new Map();
+        const categories = ['faction', 'theme', 'function', 'special'];
+        const normalized = value => value.trim().toLocaleLowerCase();
+        keywordRows.forEach(keyword => {
+          if (!keyword.id || !/^[a-z0-9_]+$/.test(keyword.id)) throw new Error(`Keyword ${keyword.id || '(empty)'} needs a lowercase snake_case id`);
+          if (keywordText.has(keyword.id)) throw new Error(`Duplicate keyword id ${keyword.id}`);
+          if (!keyword.display) throw new Error(`Keyword ${keyword.id} is missing a display label`);
+          if (!categories.includes(keyword.category)) throw new Error(`Keyword ${keyword.id} has invalid category ${keyword.category}`);
+          const displayRef = normalized(keyword.display);
+          if (keywordLookup.has(displayRef)) throw new Error(`Keyword display ${keyword.display} is already defined`);
+          keywordText.set(keyword.id, { ...keyword, description: keyword.description || '', hidden: keyword.hidden === 'true' });
+          keywordLookup.set(keyword.id.toLocaleLowerCase(), keyword.id);
+          keywordLookup.set(displayRef, keyword.id);
+        });
+      };
+
+      const parseKeywords = (value, sourceLabel) => {
+        const assignments = (value || '').split('|').map(item => item.trim()).filter(Boolean).map(reference => {
+          const keywordId = keywordLookup.get(reference.toLocaleLowerCase());
+          if (!keywordId) throw new Error(`${sourceLabel} references missing keyword “${reference}”; add it to keywords.csv`);
+          return keywordId;
+        });
+        if (new Set(assignments).size !== assignments.length) throw new Error(`${sourceLabel} has duplicate keyword assignments`);
+        return assignments;
+      };
+
+      const keywordChip = keywordId => {
+        const keyword = keywordText.get(keywordId);
+        const chip = document.createElement('span');
+        chip.className = `keyword-chip keyword-${keyword?.category || 'theme'} keyword-${keywordId}`;
+        chip.textContent = keyword?.display || keywordId;
+        const meaning = window.WarbandKeywordTooltips?.meaningFor(keywordId);
+        if (meaning) {
+          chip.dataset.keywordMeaning = meaning;
+          chip.tabIndex = 0;
+          chip.setAttribute('aria-description', meaning);
+        } else if (keyword?.description) chip.title = keyword.description;
+        return chip;
+      };
+
+      const keywordChips = keywordIds => {
+        const list = document.createElement('div');
+        list.className = 'keyword-list';
+        list.setAttribute('aria-label', 'Keywords');
+        list.replaceChildren(...(keywordIds || []).filter(keywordId => !keywordText.get(keywordId)?.hidden).map(keywordChip));
+        return list;
+      };
+
+      const setStatus = (message, kind = '') => {
+        elements.status.textContent = message;
+        elements.status.className = `status${kind ? ` ${kind}` : ''}`;
+      };
+
+      const parseNumberedEntries = value => (value || '').split('|').filter(Boolean).map(entry => {
+        const match = entry.match(/^(.+)\((\d+)\)$/);
+        if (!match) throw new Error(`Invalid numbered entry: ${entry}`);
+        return { id: match[1], count: Number(match[2]) };
+      });
+
+      const deckArray = () => cards
+        .map(card => ({ card: card.id, count: state.deck.get(card.id) || 0 }))
+        .filter(entry => entry.count > 0);
+
+      const deckCardTotal = (deck = state.deck, pendingCardId = null, pendingCount = null) => cards.reduce((total, card) => {
+        const count = pendingCardId === card.id ? pendingCount : deck.get(card.id) || 0;
+        return total + count;
+      }, 0);
+
+      const totalCards = () => deckCardTotal();
+
+      const deckPointTotal = (deck = state.deck, pendingCardId = null, pendingCount = null) => cards.reduce((total, card) => {
+        const count = pendingCardId === card.id ? pendingCount : deck.get(card.id) || 0;
+        return total + card.points * count;
+      }, 0);
+
+      const cardCountError = (card, count) => {
+        if (count > CARD_COPY_LIMIT) return `Maximum ${CARD_COPY_LIMIT} copies of ${card.name}.`;
+        const currentPoints = deckPointTotal();
+        const points = deckPointTotal(state.deck, card.id, count);
+        if (points > WARBAND_POINT_LIMIT && points > currentPoints) return `Point limit is ${WARBAND_POINT_LIMIT}; this would reach ${points}.`;
+        const currentCards = totalCards();
+        const nextCards = deckCardTotal(state.deck, card.id, count);
+        if (nextCards > MAX_DECK_CARDS && nextCards > currentCards) return `Deck limit is ${MAX_DECK_CARDS} cards.`;
+        return '';
+      };
+
+      const makeButton = (label, className, handler, ariaLabel = '') => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = className;
+        button.textContent = label;
+        if (ariaLabel) button.setAttribute('aria-label', ariaLabel);
+        button.addEventListener('click', handler);
+        return button;
+      };
+
+      const cardDetails = card => {
+        const details = document.createElement('div');
+        const name = document.createElement('div');
+        name.className = 'card-name';
+        name.textContent = card.name;
+        const meta = document.createElement('div');
+        meta.className = 'card-meta';
+        meta.textContent = `${card.type} · ${card.points} pt${card.points === 1 ? '' : 's'} · ${card.action_cost} Action${card.action_cost === '1' ? '' : 's'}${Number(card.scrap_cost) ? ` · ${card.scrap_cost} Scrap` : ''}`;
+        const description = document.createElement('div');
+        description.className = 'card-description';
+        description.textContent = card.description;
+        details.append(name, meta, keywordChips(card.keywords), description);
+        return details;
+      };
+
+      const setCardCount = (cardId, count) => {
+        if (!Number.isSafeInteger(count) || count < 0) {
+          setStatus('Card counts must be non-negative whole numbers within the safe integer range.', 'error');
+          renderDeck();
+          renderCatalogue();
+          return;
+        }
+        const card = cards.find(item => item.id === cardId);
+        const validationError = card ? cardCountError(card, count) : 'Unknown card.';
+        if (validationError) {
+          setStatus(validationError, 'error');
+          renderDeck();
+          renderCatalogue();
+          return;
+        }
+        state.deck.set(cardId, count);
+        renderDeck();
+        renderCatalogue();
+      };
+
+      const renderDeck = () => {
+        const total = totalCards();
+        const points = deckPointTotal();
+        elements['deck-total'].textContent = `${total} / ${MIN_DECK_CARDS}–${MAX_DECK_CARDS} cards`;
+        elements['deck-points'].textContent = `${points} / ${WARBAND_POINT_LIMIT} points`;
+        elements['deck-points'].style.color = points > WARBAND_POINT_LIMIT ? '#d79a8e' : '';
+        elements['empty-deck'].hidden = total !== 0;
+        elements['deck-list'].replaceChildren();
+        cards.filter(card => (state.deck.get(card.id) || 0) > 0).forEach(card => {
+          const row = document.createElement('li');
+          row.className = 'card-row';
+          const actions = document.createElement('div');
+          actions.className = 'deck-card-actions';
+          const counter = document.createElement('div');
+          counter.className = 'count-control';
+          const count = state.deck.get(card.id);
+          counter.append(
+            makeButton('−', 'button small quiet', () => setCardCount(card.id, Math.max(0, count - 1)), `Remove one ${card.name}`)
+          );
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.min = '0';
+          input.max = String(CARD_COPY_LIMIT);
+          input.step = '1';
+          input.value = String(count);
+          input.setAttribute('aria-label', `${card.name} copies`);
+          input.addEventListener('change', () => setCardCount(card.id, Number(input.value)));
+          counter.appendChild(input);
+          counter.appendChild(makeButton('+', 'button small quiet', () => setCardCount(card.id, count + 1), `Add one ${card.name}`));
+          actions.append(counter, makeButton('Remove all', 'button small quiet', () => setCardCount(card.id, 0), `Remove all ${card.name} copies`));
+          row.append(cardDetails(card), actions);
+          elements['deck-list'].appendChild(row);
+        });
+      };
+
+      const renderCatalogue = () => {
+        const query = elements['card-search'].value.trim().toLocaleLowerCase();
+        const visibleCards = cards.filter(card => {
+          const keywordLabels = (card.keywords || []).filter(keywordId => !keywordText.get(keywordId)?.hidden).map(keywordId => keywordText.get(keywordId)?.display || keywordId).join(' ');
+          return `${card.name} ${card.type} ${card.description} ${keywordLabels}`.toLocaleLowerCase().includes(query);
+        });
+        elements['empty-catalogue'].hidden = visibleCards.length !== 0;
+        elements['catalogue-list'].replaceChildren();
+        visibleCards.forEach(card => {
+          const row = document.createElement('li');
+          row.className = 'card-row';
+          const actions = document.createElement('div');
+          actions.className = 'catalogue-actions';
+          actions.appendChild(makeButton('+ Add card', 'button small', () => setCardCount(card.id, (state.deck.get(card.id) || 0) + 1), `Add one ${card.name}`));
+          const inDeck = document.createElement('span');
+          inDeck.className = 'in-deck';
+          const count = state.deck.get(card.id) || 0;
+          inDeck.textContent = `${count.toLocaleString()} in deck · ${card.points * count} pts`;
+          actions.appendChild(inDeck);
+          row.append(cardDetails(card), actions);
+          elements['catalogue-list'].appendChild(row);
+        });
+      };
+
+      const renderRoster = () => {
+        elements['token-list'].replaceChildren();
+        parseNumberedEntries(state.faction.tokens).forEach(entry => {
+          const token = tokenData.find(item => Number(item.id) === Number(entry.id) && Number(item.player) === state.faction.player);
+          if (!token) throw new Error(`Missing token ${entry.id} for ${state.faction.name}.`);
+          const article = document.createElement('article');
+          article.className = 'token';
+          const name = document.createElement('div');
+          name.className = 'token-name';
+          const tokenName = document.createElement('span');
+          tokenName.textContent = token.name;
+          const count = document.createElement('span');
+          count.className = 'token-count';
+          count.textContent = `×${entry.count}`;
+          name.append(tokenName, count);
+          const kind = document.createElement('div');
+          kind.className = 'token-kind';
+          kind.textContent = token.kind;
+          const stats = document.createElement('div');
+          stats.className = 'token-stats';
+          stats.textContent = `HP ${token.hp} · Move ${token.movement} · Initiative ${token.initiative || '—'}`;
+          article.append(name, kind, stats, keywordChips(token.keywords));
+          elements['token-list'].appendChild(article);
+        });
+      };
+
+      const renderWorkspace = () => {
+        elements.workspace.hidden = !state.faction;
+        if (!state.faction) return;
+        elements['faction-name'].textContent = state.faction.name;
+        elements['faction-name'].style.color = state.faction.color;
+        elements['faction-leader'].textContent = `Led by ${state.faction.leader} · Base faction roster preserved`;
+        elements['faction-keywords'].replaceChildren(...(state.faction.keywords || []).map(keywordChip));
+        renderRoster();
+        renderDeck();
+        renderCatalogue();
+      };
+
+      const loadWarband = (factionId, deck, currentId = null, name = '') => {
+        const faction = factions.find(item => item.player === Number(factionId));
+        if (!faction) throw new Error(`Unknown faction: ${factionId}.`);
+        const nextDeck = new Map(cards.map(card => [card.id, 0]));
+        deck.forEach(entry => {
+          if (!nextDeck.has(entry.card)) throw new Error(`Unknown card in warband: ${entry.card}.`);
+          if (!Number.isSafeInteger(entry.count) || entry.count < 0) throw new Error(`Invalid count for ${entry.card}.`);
+          nextDeck.set(entry.card, entry.count);
+        });
+        const roster = parseNumberedEntries(faction.tokens).flatMap(entry => {
+          const token = tokenData.find(item => Number(item.id) === Number(entry.id) && Number(item.player) === faction.player);
+          if (!token) throw new Error(`Missing token ${entry.id} for ${faction.name}.`);
+          return Array.from({ length: entry.count }, () => token);
+        });
+        window.WarbandLibrary.validateWarbandRoster(roster);
+        state.faction = faction;
+        state.deck = nextDeck;
+        state.currentId = currentId;
+        elements['warband-name'].value = name || `${faction.name} Custom`;
+        elements['new-faction-panel'].hidden = true;
+        renderWorkspace();
+      };
+
+      const startingDeck = faction => parseNumberedEntries(faction.deck).map(entry => ({ card: entry.id, count: entry.count }));
+
+      const refreshSavedWarbands = (selectedId = '') => {
+        const select = elements['saved-select'];
+        const records = window.WarbandLibrary.readCustomWarbands()
+          .filter(record => factions.some(faction => faction.player === record.faction))
+          .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+        select.replaceChildren(new Option(records.length ? 'Choose a saved warband…' : 'No saved warbands yet', ''));
+        records.forEach(record => {
+          const faction = factions.find(item => item.player === record.faction);
+          const total = record.deck.reduce((sum, entry) => sum + entry.count, 0);
+          select.appendChild(new Option(`${record.name} · ${faction.name} · ${total} cards`, record.id));
+        });
+        select.disabled = records.length === 0;
+        if (selectedId && records.some(record => record.id === selectedId)) select.value = selectedId;
+      };
+
+      elements['new-warband'].addEventListener('click', () => {
+        elements['new-faction-panel'].hidden = !elements['new-faction-panel'].hidden;
+        if (!elements['new-faction-panel'].hidden) elements['new-faction-select'].focus();
+      });
+
+      elements['create-warband'].addEventListener('click', () => {
+        try {
+          const faction = factions.find(item => item.player === Number(elements['new-faction-select'].value));
+          if (!faction) throw new Error('Choose a base faction first.');
+          loadWarband(faction.player, startingDeck(faction));
+          elements['saved-select'].value = '';
+          setStatus(`${faction.name} roster and starting deck loaded. Add or remove any cards, then save.`, 'success');
+        } catch (error) {
+          setStatus(error.message, 'error');
+        }
+      });
+
+      elements['built-in-select'].addEventListener('change', () => {
+        if (!elements['built-in-select'].value) return;
+        try {
+          const faction = factions.find(item => item.player === Number(elements['built-in-select'].value));
+          loadWarband(faction.player, startingDeck(faction));
+          elements['saved-select'].value = '';
+          setStatus(`${faction.name} built-in warband loaded. Your changes will not alter the built-in version.`, 'success');
+        } catch (error) {
+          setStatus(error.message, 'error');
+        }
+      });
+
+      elements['saved-select'].addEventListener('change', () => {
+        if (!elements['saved-select'].value) return;
+        try {
+          const record = window.WarbandLibrary.getCustomWarband(elements['saved-select'].value);
+          if (!record) throw new Error('This saved warband is no longer available. Import its TXT backup to restore it.');
+          loadWarband(record.faction, record.deck, record.id, record.name);
+          elements['built-in-select'].value = '';
+          setStatus(`${state.faction.name} saved warband restored from this browser. Saving again will update this entry.`, 'success');
+        } catch (error) {
+          setStatus(error.message, 'error');
+          refreshSavedWarbands();
+        }
+      });
+
+      elements['warband-file'].addEventListener('change', async () => {
+        const file = elements['warband-file'].files[0];
+        if (!file) return;
+        try {
+          const imported = window.WarbandLibrary.parseWarband(await file.text());
+          loadWarband(imported.faction, imported.deck, null, imported.name);
+          elements['built-in-select'].value = '';
+          elements['saved-select'].value = '';
+          setStatus(`${file.name} imported. Save it to restore this deck in your browser and add it to Demo 5.`, 'success');
+        } catch (error) {
+          setStatus(`Import failed: ${error.message}`, 'error');
+        } finally {
+          elements['warband-file'].value = '';
+        }
+      });
+
+      elements['save-warband'].addEventListener('click', () => {
+        if (!state.faction) return;
+        let name;
+        try {
+          name = window.WarbandLibrary.normalizeWarbandName(elements['warband-name'].value);
+        } catch (error) {
+          setStatus(error.message, 'error');
+          elements['warband-name'].focus();
+          return;
+        }
+        const deckSize = totalCards();
+        if (deckSize < MIN_DECK_CARDS || deckSize > MAX_DECK_CARDS) {
+          setStatus(`Deck size must be between ${MIN_DECK_CARDS} and ${MAX_DECK_CARDS} cards; current size is ${deckSize}.`, 'error');
+          return;
+        }
+        const overLimitCard = deckArray().find(entry => entry.count > CARD_COPY_LIMIT);
+        if (overLimitCard) {
+          const card = cards.find(item => item.id === overLimitCard.card);
+          setStatus(`Maximum ${CARD_COPY_LIMIT} copies of ${card?.name || overLimitCard.card}.`, 'error');
+          return;
+        }
+        const totalPoints = deckPointTotal();
+        if (totalPoints > WARBAND_POINT_LIMIT) {
+          setStatus(`Deck has ${totalPoints} points; the limit is ${WARBAND_POINT_LIMIT}.`, 'error');
+          return;
+        }
+        const duplicate = window.WarbandLibrary.readCustomWarbands().find(record =>
+          record.id !== state.currentId && record.name.toLowerCase() === name.toLowerCase()
+        );
+        if (duplicate) {
+          setStatus(`A saved warband named “${name}” already exists. Choose a unique name.`, 'error');
+          elements['warband-name'].focus();
+          return;
+        }
+        elements['warband-name'].value = name;
+        const warband = { id: state.currentId, name, faction: state.faction.player, deck: deckArray() };
+        let savedLocally = true;
+        try {
+          const record = window.WarbandLibrary.saveCustomWarband(warband);
+          state.currentId = record.id;
+          refreshSavedWarbands(record.id);
+        } catch (error) {
+          savedLocally = false;
+        }
+        try {
+          const text = window.WarbandLibrary.serializeWarband(warband);
+          const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          const slug = warband.name.toLocaleLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          link.href = url;
+          link.download = `${slug || 'custom'}-warband.txt`;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 0);
+          setStatus(savedLocally
+            ? `“${warband.name}” saved. It is now available in the saved-warband menu and to either player in Demo 5; your TXT download has started.`
+            : 'TXT exported, but browser storage is unavailable. This warband will not appear in Demo 5 until it is saved in a browser with storage enabled.', savedLocally ? 'success' : 'error');
+        } catch (error) {
+          setStatus(`Export failed: ${error.message}`, 'error');
+        }
+      });
+
+      elements['card-search'].addEventListener('input', renderCatalogue);
+
+      readCSV('keywords.csv')
+        .then(keywordRows => {
+          loadKeywordVocabulary(keywordRows);
+          return Promise.all([readCSV('factions.csv'), readCSV('cards.csv'), readCSV('tokens.csv')]);
+        })
+        .then(([factionRows, cardRows, tokenRows]) => {
+          factions = factionRows.map(row => ({
+            ...row,
+            player: Number(row.player),
+            keywords: parseKeywords(row.keywords, `Faction ${row.name}`)
+          }));
+          cards = cardRows.map(row => {
+            const points = Number(row.points);
+            if (!Number.isInteger(points) || points < 1) throw new Error(`Card ${row.name} needs a positive whole-number point value.`);
+            return { ...row, points, keywords: parseKeywords(row.keywords, `Card ${row.name}`) };
+          });
+          tokenData = tokenRows.map(row => ({ ...row, keywords: parseKeywords(row.keywords, `Token ${row.name}`) }));
+          elements['new-faction-select'].replaceChildren();
+          elements['built-in-select'].replaceChildren(new Option('Choose a built-in warband…', ''));
+          factions.forEach(faction => {
+            elements['new-faction-select'].appendChild(new Option(faction.name, faction.player));
+            elements['built-in-select'].appendChild(new Option(faction.name, faction.player));
+          });
+          elements['built-in-select'].disabled = false;
+          refreshSavedWarbands();
+          setStatus('Create a warband, load a built-in or browser-saved deck, or import a TXT backup.');
+        })
+        .catch(error => setStatus(`Editor initialization failed: ${error.message}`, 'error'));
+    })();
+  </script>
+  <script src="assets/ui-theme.js"></script>
+</body>
+</html>

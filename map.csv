@@ -1,0 +1,38 @@
+q,r,terrain,effects,icon,terrain_pl,terrain_de
+0,-3,Roots,Dense Foliage,dead-tree,Korzenie,Wurzeln
+1,-3,Grass,Foliage,,Trawa,Gras
+2,-3,Mud,High Ground,rocks,Błoto,Schlamm
+3,-3,Mud,,,Błoto,Schlamm
+-1,-2,Grass,,,Trawa,Gras
+0,-2,Grass,,,Trawa,Gras
+1,-2,Roots,,,Korzenie,Wurzeln
+2,-2,Grass,,,Trawa,Gras
+3,-2,Roots,,,Korzenie,Wurzeln
+-2,-1,Mud,Low Ground,,Błoto,Schlamm
+-1,-1,Roots,,,Korzenie,Wurzeln
+0,-1,Mud,Low Ground,,Błoto,Schlamm
+1,-1,Grass,High Ground,rocks,Trawa,Gras
+2,-1,Roots,Dense Foliage,dead-tree,Korzenie,Wurzeln
+3,-1,Grass,Foliage,,Trawa,Gras
+-3,0,Grass,,,Trawa,Gras
+-2,0,Mud,,,Błoto,Schlamm
+-1,0,Mud,,,Błoto,Schlamm
+0,0,Mud,Low Ground,,Błoto,Schlamm
+1,0,Grass,,,Trawa,Gras
+2,0,Mud,,,Błoto,Schlamm
+3,0,Roots,,,Korzenie,Wurzeln
+-3,1,Mud,,,Błoto,Schlamm
+-2,1,Grass,,,Trawa,Gras
+-1,1,Roots,,,Korzenie,Wurzeln
+0,1,Grass,,,Trawa,Gras
+1,1,Mud,,,Błoto,Schlamm
+2,1,Roots,Foliage,,Korzenie,Wurzeln
+-3,2,Roots,Dense Foliage,dead-tree,Korzenie,Wurzeln
+-2,2,Mud,,,Błoto,Schlamm
+-1,2,Grass,,,Trawa,Gras
+0,2,Mud,High Ground,rocks,Błoto,Schlamm
+1,2,Mud,,,Błoto,Schlamm
+-3,3,Mud,,,Błoto,Schlamm
+-2,3,Grass,,,Trawa,Gras
+-1,3,Grass,,,Trawa,Gras
+0,3,Roots,,,Korzenie,Wurzeln

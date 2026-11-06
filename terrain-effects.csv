@@ -1,0 +1,5 @@
+name,glyph,name_pl,name_de,description,description_pl,description_de
+Foliage,❧,Roślinność,Blattwerk,Tokens here take 1 less damage from shooting hits.,Żetony na tym polu otrzymują o 1 mniej obrażeń od trafień strzałami.,Tokens auf diesem Feld erleiden durch Schusstreffer 1 Schaden weniger.
+Dense Foliage,♣,Gęsta Roślinność,Dichtes Blattwerk,Tokens here take 2 less damage from shooting hits.,Żetony na tym polu otrzymują o 2 mniej obrażeń od trafień strzałami.,Tokens auf diesem Feld erleiden durch Schusstreffer 2 Schaden weniger.
+High Ground,↟,Wyższy Teren,Hohes Gelände,,,
+Low Ground,↡,Niższy Teren,Niedriges Gelände,,,

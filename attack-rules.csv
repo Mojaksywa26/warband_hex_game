@@ -1,0 +1,6 @@
+id,source,attack_types,target_players,modifier,operation,value,condition_type,condition_value
+long_reach_high_ground,static:Long Reach,shooting,self,damage,add,1,attacker_terrain,High Ground
+war_song,card:war_song,close,self,damage,add,1,always,
+aim_well,card:aim_well,shooting,self,damage,add,1,always,
+exploit_opening,static:Exploit Opening,all,self,damage,multiply,2,target_side_no_attacks,any
+blood_offering,activated:Blood Offering,close,self,damage,add,1,always,

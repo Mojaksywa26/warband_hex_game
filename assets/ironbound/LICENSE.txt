@@ -1,0 +1,14 @@
+Ironbound UI texture sources
+
+Paper001, Leather026, Rock035, and Wood051 color maps are from ambientCG.com.
+Source pages:
+https://ambientcg.com/a/Paper001
+https://ambientcg.com/a/Leather026
+https://ambientcg.com/a/Rock035
+https://ambientcg.com/a/Wood051
+
+All four assets are licensed under Creative Commons CC0 1.0 Universal.
+https://creativecommons.org/publicdomain/zero/1.0/
+https://docs.ambientcg.com/license/
+
+The bundled color maps have been resized and recompressed for this project.
