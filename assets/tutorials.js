@@ -256,10 +256,10 @@
         { opacity: 1, transform: 'translateY(0)' }
       ], { duration: 160, easing: 'ease-out' });
     }
-    glowTimer = startGlowCycle(session.box, 3000, 1200);
+    glowTimer = startGlowCycle(session.box, 2100, 1200);
     glowSwitchTimer = setTimeout(() => {
       clearInterval(glowTimer);
-      glowTimer = startGlowCycle(session.next, 3000, 1200);
+      glowTimer = startGlowCycle(session.next, 2100, 1200);
     }, 10000);
   };
 
