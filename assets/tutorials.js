@@ -320,18 +320,27 @@
     if (glowSwitchTimer) { clearTimeout(glowSwitchTimer); glowSwitchTimer = null; }
   };
 
-  const startGlow = (element, duration = 1200) => {
+  const startGlow = (element, duration = 1200, intensity = 1) => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const blur = Math.round(26 * intensity);
+    const spread = Math.round(5 * intensity);
+    const alpha = Math.min(.70 * intensity, .95);
     element.animate([
-      { boxShadow: '0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 0 0 rgba(198,163,86,0)' },
-      { boxShadow: '0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 18px 3px rgba(198,163,86,.55)', offset: 0.166 },
-      { boxShadow: '0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 0 0 rgba(198,163,86,0)', offset: 1 }
+      { boxShadow: `0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 0 0 rgba(198,163,86,0)` },
+      { boxShadow: `0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 ${blur}px ${spread}px rgba(198,163,86,${alpha})`, offset: 0.166 },
+      { boxShadow: `0 14px 38px rgba(0,0,0,.62), inset 0 0 0 1px rgba(244,236,216,.025), 0 0 0 0 rgba(198,163,86,0)`, offset: 1 }
     ], { duration, easing: 'ease-in-out' });
   };
 
   const startGlowCycle = (element, interval = 3000, duration = 1200) => {
-    startGlow(element, duration);
-    return setInterval(() => startGlow(element, duration), interval);
+    let pulseCount = 0;
+    const runPulse = () => {
+      pulseCount++;
+      const intensity = pulseCount % 2 === 0 ? 1.5 : 1;
+      startGlow(element, duration, intensity);
+    };
+    runPulse();
+    return setInterval(runPulse, interval);
   };
 
   const start = slides => {
