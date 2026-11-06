@@ -8547,10 +8547,12 @@
     const hideBattleDeathSkull = tokenIndex => {
       const skull = battleDeathLayer.querySelector(`[data-battle-death-token="${tokenIndex}"]`);
       if (!skull) return;
+      skull.getAnimations().forEach(anim => anim.cancel());
+      skull.style.opacity = '0.50';
       const anim = skull.animate([
         { opacity: 0.50 },
         { opacity: 0 }
-      ], { duration: 500, easing: 'ease-out' });
+      ], { duration: 500, easing: 'ease-out', fill: 'forwards' });
       anim.onfinish = () => skull.remove();
     };
     const destroySprout = tokenIndex => {
