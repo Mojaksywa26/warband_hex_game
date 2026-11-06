@@ -8540,12 +8540,18 @@
       battleDeathLayer.appendChild(skull);
       skull.animate([
         { opacity: 0, offset: 0 },
-        { opacity: 0.96, offset: 0.545 },
-        { opacity: 0, offset: 1 }
-      ], { duration: 1100, easing: 'ease-out', fill: 'forwards' });
+        { opacity: 0.96, offset: 0.6 },
+        { opacity: 0.50, offset: 1 }
+      ], { duration: 1000, easing: 'ease-out', fill: 'forwards' });
     };
     const hideBattleDeathSkull = tokenIndex => {
-      battleDeathLayer.querySelector(`[data-battle-death-token="${tokenIndex}"]`)?.remove();
+      const skull = battleDeathLayer.querySelector(`[data-battle-death-token="${tokenIndex}"]`);
+      if (!skull) return;
+      const anim = skull.animate([
+        { opacity: 0.50 },
+        { opacity: 0 }
+      ], { duration: 500, easing: 'ease-out' });
+      anim.onfinish = () => skull.remove();
     };
     const destroySprout = tokenIndex => {
       if (!isSproutToken(tokenIndex)) return;
